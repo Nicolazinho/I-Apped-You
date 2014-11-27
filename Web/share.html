@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{% autoescape true %}
+
+<title>I Apped You</title>
+
+<html>
+
+   <head>
+	<link href='http://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+  
+  <body onload="init()">
+    <form enctype="multipart/form-data" method="post" class="pure-form">
+        <table align="center" border=0 class="main-table">
+          
+          <tr>
+            <td colspan="3" align="center"><h1>I Apped You</h1>
+          </tr>
+          
+          <tr>
+            <td colspan="3" align="center" valign="top" height="50"><h2>Unique apps for the special people in your life</h2>
+          </tr>
+		  
+          <tr>
+            <td width="340" valign="bottom" colspan="3">
+          </tr>
+          
+          <tr>
+            <td width="340" valign="bottom">
+			<td rowspan="5" width="20">
+			<td rowspan="5">
+				<div class="phone-container">
+					<div class="inside-container">
+						<div class="vertical">
+				      		<img id="app_image" src="{{ image_file }}" class="app-image">
+				   	 	</div>
+					</div>
+	                <input id="button1" type="button" value="{{ button1_text }}" onclick="playRecording('audio_url1')" class="pure-button pure-button-demo" style="top: 5px; left: 23px">
+	                <input id="button2" type="button" value="{{ button2_text }}" onclick="playRecording('audio_url2')" class="pure-button pure-button-demo" style="top: 5px; left: 24px">
+	                <input id="button3" type="button" value="{{ button3_text }}" onclick="playRecording('audio_url3')" class="pure-button pure-button-demo" style="top: 8px; left: 23px">
+	                <input id="button4" type="button" value="{{ button4_text }}" onclick="playRecording('audio_url4')" class="pure-button pure-button-demo" style="top: 8px; left: 24px">
+              </div>
+          </tr>
+          
+          <tr height=200>
+            <td valign="bottom"><h3>Congratulations!<p>You have generated a new personalized<br> app with the unique code <b>{{ old_content_id_text }}</b>.<p>Now just download the <i>I Apped You</i><br> mobile app for <a href="https://play.google.com/store/apps/details?id=com.iappedyou.mobile">Android</a> and enter your<br> unique code {{ old_content_id_text }}.</h3>
+          </tr>
+          
+          <tr>
+			  <td align="center" valign="middle"><input type="button" value="Share via email" class="pure-button pure-button-primary" style="width: 150px" onClick="emailSend()">
+          </tr>
+		  
+          <tr>
+			  <td align="center" valign="middle"><input type="button" value="Copy to clipboard" class="pure-button pure-button-primary" style="width: 150px" onClick="copyToClipboard()">
+          </tr>
+          
+          <tr>
+            <td align="center">Or create a new app <a href="http://www.iappedyou.com/create">here</a>.
+          </tr>
+
+        </table>
+		<!--<div id="error" style="word-break: break-all;"></div>-->
+    </form>
+	
+    <table>
+    <tr id="one">
+      <td><input id="audio_url1" type="hidden" name="audio_url1" value='{{ audio_source1 }}'>
+    </tr>
+    <tr id="two">
+      <td><input id="audio_url2" type="hidden" name="audio_url2" value='{{ audio_source2 }}'>
+    </tr>
+    <tr id="three">
+      <td><input id="audio_url3" type="hidden" name="audio_url3" value='{{ audio_source3 }}'>
+    </tr>
+    <tr id="four">
+      <td><input id="audio_url4" type="hidden" name="audio_url4" value='{{ audio_source4 }}'>
+    </tr>
+    </table>
+	
+  <script>
+
+  function playRecording(button) {
+    var audio = document.createElement('audio');
+    var source_queue = document.getElementById(button).value;
+	//document.getElementById("error").innerHTML = source_queue;
+    audio.src = source_queue;
+    audio.play();
+  }
+
+  function init() {
+    try {
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+      window.URL = window.URL || window.webkitURL;
+      
+      audio_context = new AudioContext;
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+    	
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+
+    });
+	
+  };
+  
+  function emailSend() {
+      window.open("mailto:?subject=An app just for you!&body=Hi there,%0A%0AI just made you your very own personalized app and I hope you'll enjoy it!%0A%0AJust download the 'I Apped You' app from the app store and enter your unique code {{ old_content_id_text }}.%0A%0AHere is the app for Android: http://goo.gl/ItgL4j%0A%0ARemember to enter {{ old_content_id_text }}. Let me know what you think!");
+    }
+  
+	function copyToClipboard(text) {
+	  window.prompt("Mac: ⌘+C, Windows: Ctrl+C", "{{ old_content_id_text }}");
+	}
+  
+  </script>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-55874084-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>
+
+{% endautoescape %}

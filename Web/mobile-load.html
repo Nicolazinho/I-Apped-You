@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+   	<head>
+		<link href='http://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+    	<link rel="stylesheet" type="text/css" href="css/style.css">
+  	</head>
+	
+<body style="margin: 0; padding: 0; height: 100%">
+	
+	<form class="pure-form" style="height: 100%">
+        <table border=0 class="table-mobile" style="border-spacing: 0; height: 100%">
+          
+	      <colgroup>
+	         <col span="1" style="width: 50%;">
+	         <col span="1" style="width: 50%;">
+	      </colgroup>
+		  
+          <tr style="height: 90px" id="one">
+            <td colspan="2" align="center" style="background-color: #fe9001"><div style="color: white"><h2>I Apped You</h2></div>
+          </tr>
+         
+          <tr id="two">
+            <td colspan="2" align="center" style="max-width:100%; padding: 10px"><img src="{{ image_file }}" style="max-width:100%; max-height:60%">
+          </tr>
+
+          <tr id="three">
+          	<td align="center" id="three1"><input id="button1" type="button" name="button1" value="{{ button1_text }}" onclick="playRecording(this)" class="pure-button" style="width: 150px; height: 50px"><input id="audio_url1" type="hidden" name="audio_url1" value='{{ audio_source1 }}'>
+			<td align="center" id="three3"><input id="button2" type="button" name="button2" value="{{ button2_text }}" onclick="playRecording(this)" class="pure-button" style="width: 150px; height: 50px"><input id="audio_url2" type="hidden" name="audio_url2" value='{{ audio_source2 }}'>		
+          </tr>
+		  
+          <tr id="four">
+          	<td align="center" id="four1" style="padding: 10px"><input id="button3" type="button" name="button3" value="{{ button3_text }}" onclick="playRecording(this)" class="pure-button" style="width: 150px; height: 50px"><input id="audio_url3" type="hidden" name="audio_url3" value='{{ audio_source3 }}'>
+			<td align="center" id="four3" style="padding: 10px"><input id="button4" type="button" name="button4" value="{{ button4_text }}" onclick="playRecording(this)" class="pure-button" style="width: 150px; height: 50px"><input id="audio_url4" type="hidden" name="audio_url4" value='{{ audio_source4 }}'>		
+          </tr>
+		  
+		</table>
+		
+	</form>
+		
+	<script type="text/javascript">
+	
+	    function playRecording(button) {
+  	      var audio = document.createElement('audio');
+		  var e_id = button.id;
+	      var source_queue = document.getElementById(e_id).nextSibling.id;
+	      var source_field = document.getElementById(source_queue).value;
+  	      audio.src = source_field;
+  	      audio.play();
+	    }
+		
+	</script>
+	
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-55874084-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+</body>
+</html>

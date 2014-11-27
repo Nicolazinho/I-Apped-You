@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+{% autoescape true %}
+
+<title>I Apped You</title>
+
+<html>
+
+   <head>
+	<link href='http://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+  
+  <body onload="init(); listen()">
+    <form action={{ upload_url }} enctype="multipart/form-data" method="post" class="pure-form">
+        <table align="center" border=0 class="main-table">
+          
+          <tr>
+            <td colspan="3" align="center"><h1>I Apped You</h1>
+          </tr>
+          
+          <tr>
+            <td colspan="3" align="center" valign="top" height="50"><h2>Unique apps for the special people in your life</h2>
+          </tr>
+		  
+          <tr>
+            <td width="340" valign="bottom" colspan="3">
+          </tr>
+          
+          <tr>
+            <td align="center" width="340"><span class="fileUpload pure-button">Upload a picture
+				<input id="image_upload" type="file" name="img" class="upload" onchange="picture_preview();" multiple/></span>
+			<td rowspan="3" width="20">
+			<td rowspan="3">
+				<div class="phone-container">
+					<div class="inside-container">
+						<div class="vertical">
+				      		<img id="app_image" src="{{ image_file }}" class="app-image">
+				   	 	</div>
+					</div>
+	                <input id="button1" type="button" value="{{ button1_text }}" onclick="playRecording(playing1)" class="pure-button pure-button-demo" style="top: 5px; left: 23px">
+	                <input id="button2" type="button" value="{{ button2_text }}" onclick="playRecording(playing2)" class="pure-button pure-button-demo" style="top: 5px; left: 24px">
+	                <input id="button3" type="button" value="{{ button3_text }}" onclick="playRecording(playing3)" class="pure-button pure-button-demo" style="top: 8px; left: 23px">
+	                <input id="button4" type="button" value="{{ button4_text }}" onclick="playRecording(playing4)" class="pure-button pure-button-demo" style="top: 8px; left: 24px">
+              </div>
+          </tr>
+          
+          <tr height="10">
+            <td>
+              <table class="pure-table pure-table-horizontal">
+              <tr id="one">
+                <td><input id="text1" type="text" name="button1" value="{{ button1_text }}" placeholder="Button 1" size="20" maxlength="15">
+                <td><input id="recording1" type="button" value="Record" onclick="startstopRecording(this)" class="pure-button" disabled>
+                <td><input id="playing1" type="button" value="Play" onclick="playRecording(this)" class="pure-button">
+                <td><input id="audio_url1" type="hidden" name="audio_url1" value='{{ audio_source1 }}'>
+              </tr>
+              <tr id="two">
+                <td><input id="text2" type="text" name="button2" value="{{ button2_text }}" placeholder="Button 2" size="20" maxlength="15">
+                <td><input id="recording2" type="button" value="Record" onclick="startstopRecording(this)" class="pure-button" disabled>
+                <td><input id="playing2" type="button" value="Play" onclick="playRecording(this)" class="pure-button">
+                <td><input id="audio_url2" type="hidden" name="audio_url2" value='{{ audio_source2 }}'>
+              </tr>
+              <tr id="three">
+                <td><input id="text3" type="text" name="button3" value="{{ button3_text }}" placeholder="Button 3" size="20" maxlength="15">
+                <td><input id="recording3" type="button" value="Record" onclick="startstopRecording(this)" class="pure-button" disabled>
+                <td><input id="playing3" type="button" value="Play" onclick="playRecording(this)" class="pure-button">
+                <td><input id="audio_url3" type="hidden" name="audio_url3" value='{{ audio_source3 }}'>
+              </tr>
+              <tr id="four">
+                <td><input id="text4" type="text" name="button4" value="{{ button4_text }}" placeholder="Button 4" size="20" maxlength="15">
+                <td><input id="recording4" type="button" value="Record" onclick="startstopRecording(this)" class="pure-button" disabled>
+                <td><input id="playing4" type="button" value="Play" onclick="playRecording(this)" class="pure-button">
+                <td><input id="audio_url4" type="hidden" name="audio_url4" value='{{ audio_source4 }}'>
+              </tr>
+              </table>
+          </tr>
+          
+          <tr>
+            <td valign="middle" align="center"><input type="submit" value="Share" class="pure-button pure-button-primary">
+          </tr>
+
+        </table>
+    </form>
+	
+  <script>
+
+  var audio_context;
+  var recorder;
+
+  function startUserMedia(stream) {
+    var input = audio_context.createMediaStreamSource(stream);
+    //input.connect(audio_context.destination);
+    recorder = new Recorder(input);
+    document.getElementById('recording1').disabled = false;
+    document.getElementById('recording2').disabled = false;
+    document.getElementById('recording3').disabled = false;
+    document.getElementById('recording4').disabled = false;
+    //recorder.muted = true;
+  }
+
+  function startstopRecording(button) {
+    var button_parent_id = button.parentNode.parentNode.id;
+    if (button.value == "Record") {
+        button.value = "Stop";
+        var play_queue = document.getElementById(button_parent_id).children[2];
+        var play_button = play_queue.children[0].id;
+        document.getElementById(play_button).disabled = true;
+        recorder && recorder.record(button_parent_id);
+      }
+    else {
+        recorder && recorder.stop();
+        createDownloadLink();
+        recorder.clear();
+        button.value = "Record";
+      }
+  }
+
+  function playRecording(button) {
+    var audio = document.createElement('audio');
+    var button_parent_id = button.parentNode.parentNode.id;
+    var source_queue = document.getElementById(button_parent_id).children[3];
+    var source_field = source_queue.children[0].value;
+    audio.src = source_field;
+    audio.play();
+  }
+
+  function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+    });
+  }
+
+  function init() {
+    try {
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+      window.URL = window.URL || window.webkitURL;
+      
+      audio_context = new AudioContext;
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+    	
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+
+    });
+	
+  };
+  
+  function picture_preview() {
+		  
+	      var files = document.getElementById("image_upload").files;
+	  
+	      if (files.length === 0) 
+	      {
+	         return;
+	      }
+
+	      var html = [];
+	      for (var i = 0; i < files.length; i++) 
+	      {
+	          var file = files[i];
+
+	          var reader = new FileReader();
+
+	          /* Check whether the file is an image */
+	          if (!file.type.match("image.*")) 
+	          {
+	             continue;
+	          }
+
+	          reader.onload = (function(e) 
+	          { 
+	              var img = document.createElement("img");
+	              img.src = e.target.result; 
+
+	              /* Set the selected image's dataURL */     
+	              //img.title = escape(file.name);
+	              //img.className = "img";
+				  
+				document.getElementById("app_image").src = e.target.result;
+				
+	          });
+	          reader.readAsDataURL(file);
+	      }	  
+	  }
+  
+  function listen() {
+	  function get_ml() {
+		  document.getElementById("button1").value = document.getElementById("text1").value;
+		  document.getElementById("button2").value = document.getElementById("text2").value;
+		  document.getElementById("button3").value = document.getElementById("text3").value;
+		  document.getElementById("button4").value = document.getElementById("text4").value;
+	  }
+	  
+	  var el1 = document.getElementById('text1'); 
+	  var el2 = document.getElementById('text2');
+	  var el3 = document.getElementById('text3');
+	  var el4 = document.getElementById('text4');
+
+	  if (typeof el1.addEventListener != "undefined") {
+	      el1.addEventListener("keyup", function(evt) {
+	          get_ml();
+	      }, false);
+	  } else if (typeof el1.attachEvent != "undefined") { //incase you support IE8
+	      el1.attachEvent("onkeyup", function(evt) {
+	          get_ml();
+	      });
+	  }
+	  
+	  if (typeof el2.addEventListener != "undefined") {
+	      el2.addEventListener("keyup", function(evt) {
+	          get_ml();
+	      }, false);
+	  } else if (typeof el2.attachEvent != "undefined") { //incase you support IE8
+	      el2.attachEvent("onkeyup", function(evt) {
+	          get_ml();
+	      });
+	  }
+	  
+	  if (typeof el3.addEventListener != "undefined") {
+	      el3.addEventListener("keyup", function(evt) {
+	          get_ml();
+	      }, false);
+	  } else if (typeof el3.attachEvent != "undefined") { //incase you support IE8
+	      el3.attachEvent("onkeyup", function(evt) {
+	          get_ml();
+	      });
+	  }
+	  
+	  if (typeof el4.addEventListener != "undefined") {
+	      el4.addEventListener("keyup", function(evt) {
+	          get_ml();
+	      }, false);
+	  } else if (typeof el4.attachEvent != "undefined") { //incase you support IE8
+	      el4.attachEvent("onkeyup", function(evt) {
+	          get_ml();
+	      });
+	  }
+	  
+  }
+  
+  </script>
+  
+  <script src="js/jquery-1.11.0.min.js"></script>  
+  <script src="js/recordmp3.js"></script>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-55874084-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+  
+</body>
+</html>
+
+{% endautoescape %}
