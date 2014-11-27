@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+   	<head>
+		<link href='http://fonts.googleapis.com/css?family=Neucha' rel='stylesheet' type='text/css'>
+    	<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="phonegap.js"></script>
+  	</head>
+	
+<body style="margin: 0; padding: 0">
+
+	<form class="pure-form">
+         <table border=0 class="table-mobile" style="border-spacing: 0">
+          
+	      <colgroup>
+	         <col span="1" style="width: 50%;">
+	         <col span="1" style="width: 50%;">
+	      </colgroup>
+		  
+          <tr style="height: 90px" id="one">
+            <td colspan="2" align="center" style="background-color: #fe9001"><div style="color: white"><h2>I Apped You</h2></div>
+          </tr>
+         
+          <tr style="height: 60px">
+            <td colspan="2" valign="center" align="center" style="max-width:100%">
+          </tr>
+		  
+		  <tr style="height: 60px">
+            <td colspan="2" valign="center" align="center" style="max-width:100%">To see your personal app please enter the code you received:
+          </tr>
+
+          <tr>
+	        <td colspan="2" align="center" style="padding: 10px"><input id="code" name="code" size="11" maxlength="6" type="text" value="" onClick="empty()">
+          </tr>
+
+          <tr>	
+	        <td colspan="2" align="center" style="padding: 10px"><input id="go" type="button" value="Get it" onclick="redirect()" class="pure-button">
+          </tr>
+		  
+          <tr style="height: 60px">
+            <td colspan="2">
+          </tr>
+		  
+          <tr>
+			<td colspan="2" align="center"><div style="font-size: 90%;"><a href="faq.html">Have not received a code yet?</a></div>
+          </tr>
+		  
+          <tr>
+			<td colspan="2" align="center"><div style="font-size: 90%;"><a href="faq.html">Want to create your own app?</a></div>
+          </tr>
+		  
+		</table>
+	</form>
+	
+	<script>
+		function redirect() {
+	    	var code = document.getElementById("code").value;
+			if (code == "") {
+				alert("Please enter your unique code.")
+			}
+			else {
+				var destination = "http://www.iappedyou.com/mobile-load?id=" + code;
+				window.location = destination;
+			}
+		}
+    	function empty() {
+			document.getElementById("code").value = "";
+		}
+	</script>
+
+</body>
+</html>

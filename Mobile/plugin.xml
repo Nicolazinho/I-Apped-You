@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="org.apache.cordova.device" version="0.2.3">
+    <name>Device</name>
+    <description>Cordova Device Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,device</keywords>
+    <js-module src="www/Media.js" name="Media">
+        <clobbers target="Media" />
+    </js-module>
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Media">
+                <param name="Media" value="http://api.phonegap.com/1.0/media"/>
+            </feature>
+        </config-file>
+    </platform>
+</plugin>
