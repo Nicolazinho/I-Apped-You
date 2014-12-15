@@ -169,6 +169,7 @@ class LoadExistingCode(webapp2.RequestHandler):
     def get(self):
 
         old_content_id = self.request.get('id')
+        old_content_id.upper()
         
         greetings_query = Content.query(ancestor=content_key(old_content_id))
         greetings = greetings_query.fetch(1)
